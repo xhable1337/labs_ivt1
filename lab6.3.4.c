@@ -15,8 +15,6 @@ void sp() {
 }
 
 void card_to_text(int value, int suit) {
-	char text_suit[15] = "abcdefghijklmno", text_value[15] = "abcdefghijklmno";
-
 	printf_s("Введённая карта: ");
 	switch (value)	{
 		case 6: printf_s("шестёрка "); break;
