@@ -32,7 +32,7 @@ void card_to_text(int value, int suit) {
 
 	switch (suit) {
 		case 1: printf_s("пик.\n"); break;
-		сase 2: printf_s("треф.\n"); break;
+		case 2: printf_s("треф.\n"); break;
 		case 3: printf_s("бубен.\n"); break;
 		case 4: printf_s("червей.\n"); break;
 	}
