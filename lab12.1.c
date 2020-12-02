@@ -15,9 +15,7 @@ void sp() {
 int part_division(int time, int part_count, int end_time, int logging) {
 	if (logging == 1) {sp(); printf_s("[Log] Через %d часа(ов) амёба будет иметь %d клеток\n", time, part_count);}
 	if (time == end_time) return part_count;
-	time += 3;
-	part_count *= 2;
-	return part_division(time, part_count, end_time, logging);
+	return part_division(time + 3, part_count * 2, end_time, logging);
 }
 
 int main() {
