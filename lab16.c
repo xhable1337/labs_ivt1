@@ -4,29 +4,24 @@
 #include <math.h>
 #include <time.h>
 
-/* Лабораторная работа 16.
+/* Лабораторная работа 15.
 13. Имеется массив данных о К работающих в фирме: фамилия
 и дата поступления на работу (день, месяц, год). Вывести на экран
 фамилии тех, кто поступил на работу в определенную дату. Дата
 (день, месяц и год) вводится с клавиатуры.
-<=================================================================>
-За основу берется выполненное задание предыдущей
-лабораторной работы. К реализованному в ней функционалу
-добавить следующие возможности:
-* сохранение в бинарный файл массива структур, введенного
-с клавиатуры;
-* считывание массива структур из бинарного файла
-(количество элементов массива хранится в начале файла).
 */
 
 // Синтаксис файла input.txt
-
 /*
 <размерность_массива = n>
 <фамилия_1>
 <день_1>
 <месяц_1>
 <год_1>
+<фамилия_2>
+<день_2>
+<месяц_2>
+<год_2>
 ...
 <фамилия_n>
 <день_n>
@@ -39,11 +34,15 @@ void sp() {
 	printf("------------------------------------------------\n");
 }
 
+#define n 30
+
+
 struct employees         // Инициализация структуры работников
 {
-	char last_name[30];   // Фамилия работника
-	int day, month, year; // Дата поступления на работу
+	char last_name[n];
+	int day, month, year;
 };
+
 
 //                                                   -=[ Функции ввода массива ]=-
 
@@ -53,12 +52,12 @@ struct employees         // Инициализация структуры раб
 * array_size - размерность массива
 */
 int array_input(struct employees* arr) {
-	int array_size;
+	int element, array_size;
 	printf_s("Введите размерность массива: "); scanf_s("%d", &array_size);
 	sp();
-	int element;
 	for (int i = 0; i < array_size; i++)
 	{
+
 		printf("Введите фамилию %d человека: ", i + 1); scanf_s("%s", &arr[i].last_name, 30);
 
 		do {
@@ -77,6 +76,7 @@ int array_input(struct employees* arr) {
 
 		printf("Введите год поступления %d человека на работу: ", i + 1); scanf_s("%d", &arr[i].year);
 		sp();
+
 	}
 
 	return array_size;
@@ -86,25 +86,26 @@ int array_input(struct employees* arr) {
 int array_fromfile(struct employees* arr) {
 	errno_t err;
 	FILE* file;
-	int element = 0;
 	int array_size = 0;
+	int line = 1;
 	err = fopen_s(&file, "input.txt", "rt");
 	do {
 		if (err == 0)
 		{
 			fscanf_s(file, "%d", &array_size);
 			for (int i = 0; i < array_size; i++) {
+
 				fscanf_s(file, "%s", &arr[i].last_name, 30);
 				printf_s("Фамилия %d человека: %s\n", i + 1, arr[i].last_name);
-				
+
 				fscanf_s(file, "%d", &arr[i].day);
 				printf_s("День поступления %d человека на работу: %d\n", i + 1, arr[i].day);
-				
+
 				fscanf_s(file, "%d", &arr[i].month);
 				printf_s("Месяц поступления %d человека на работу: %d\n", i + 1, arr[i].month);
-				
+
 				fscanf_s(file, "%d", &arr[i].year);
-				printf_s("Год поступления %d человека на работу: %d\n", i + 1, arr[i].year);
+				printf_s("Месяц поступления %d человека на работу: %d\n", i + 1, arr[i].year);
 
 				sp();
 			}
@@ -117,16 +118,16 @@ int array_fromfile(struct employees* arr) {
 	return array_size;
 }
 
-// Функция получения массива из бинарного файла output.txt (должен быть в одном каталоге с исполняемым!)
+// Функция получения массива из бинарного файла input.bin (должен быть в одном каталоге с исполняемым!)
 int array_frombinary(struct employees* arr) {
 	FILE* binary;
 	errno_t err;
-	int array_size;
 	err = fopen_s(&binary, "input.bin", "rb");
-	fread(&array_size, sizeof(array_size), 1, binary);
+
+	/*fread(&array_size, sizeof(array_size), 1, binary);
 
 	for (int i = 0; i < array_size; i++) {
-		fread(&arr[i].last_name, 1, sizeof(arr[i].last_name), binary);
+		fread(&arr[i].last_name, sizeof(arr[i].last_name), 1, binary);
 		printf_s("Фамилия %d человека: %s\n", i + 1, arr[i].last_name);
 
 		fread(&arr[i].day, sizeof(int), 1, binary);
@@ -137,12 +138,15 @@ int array_frombinary(struct employees* arr) {
 
 		fread(&arr[i].year, sizeof(int), 1, binary);
 		printf_s("Год поступления %d человека на работу: %d\n", i + 1, arr[i].year);
+
 		sp();
-	}
-	
+	}*/
+
+	fread(arr, sizeof(arr), n, binary);
+
 	printf_s("Массив прочитан из бинарного файла!\n");
 	sp();
-	return array_size;
+	return n;
 }
 
 // Функция получения способа заполнения массива.
@@ -165,15 +169,15 @@ int get_input_way() {
 	return input_way;
 }
 
-// ============================================================================ \\
-\\ ============================================================================ //
+//===========================================================================================//
 
-/* Функция вывода массива на экран.
-На входе получает:
-* arr - указатель на массив
-* array_size - размерность массива
+/*                 Функция вывода массива на экран.
+                         На входе получает:
+* «arr» - указатель на массив
+* «array_size» - размерность массива
 */
 void array_print(struct employees* arr, int array_size) {
+	int element;
 	int count = 0;
 	int day, month, year;
 
@@ -194,6 +198,7 @@ void array_print(struct employees* arr, int array_size) {
 	printf_s("Люди, поступившие на работу %d.%d.%d:\n", day, month, year);
 	for (int i = 0; i < array_size; i++)
 	{
+		printf_s("[debug] %s - %d.%d.%d\n\n", arr[i].last_name, arr[i].day, arr[i].month, arr[i].year);
 		if (arr[i].day == day && arr[i].month == month && arr[i].year == year)
 		{
 			count++;
@@ -202,19 +207,17 @@ void array_print(struct employees* arr, int array_size) {
 
 	}
 
-	if (count == 0)
-	{
-		printf_s("отсутствуют.\n");
-	}
+	if (count == 0) printf_s("отсутствуют.\n");
 	sp();
 }
 
 void array_tobinary(struct employees* arr, int array_size) {
 	FILE* binary;
 	errno_t err;
+	int line = 1;
 	err = fopen_s(&binary, "output.bin", "wb");
 
-	fwrite(&array_size, 1, sizeof(array_size), binary);
+	/*fwrite(&array_size, sizeof(array_size), 1, binary);
 
 	for (int i = 0; i < array_size; i++) {
 		fwrite(&arr[i].last_name, sizeof(arr[i].last_name), 1, binary);
@@ -229,7 +232,10 @@ void array_tobinary(struct employees* arr, int array_size) {
 		fwrite(&arr[i].year, sizeof(int), 1, binary);
 		printf_s("Год поступления %d человека на работу: %d\n", i + 1, arr[i].year);
 		sp();
-	}
+	}*/
+
+	fwrite(arr, sizeof(arr), n, binary);
+
 	fclose(binary);
 	printf_s("Записан в бинарный файл!\n");
 	sp();
