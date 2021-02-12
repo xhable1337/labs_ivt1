@@ -34,16 +34,15 @@ void sp() {
 	printf("------------------------------------------------\n");
 }
 
-#define n 30
-
-
-struct employees         // Инициализация структуры работников
+struct employees                      // Инициализация структуры работников
 {
-	char last_name[n];
+	char last_name[30];
 	int day, month, year;
 };
 
+int employees_max = 30;               // Максимальное количество элементов в массиве структуры employees
 
+//===========================================================================================//
 //                                                   -=[ Функции ввода массива ]=-
 
 /* Функция заполнения массива с клавиатуры.
@@ -124,29 +123,11 @@ int array_frombinary(struct employees* arr) {
 	errno_t err;
 	err = fopen_s(&binary, "input.bin", "rb");
 
-	/*fread(&array_size, sizeof(array_size), 1, binary);
-
-	for (int i = 0; i < array_size; i++) {
-		fread(&arr[i].last_name, sizeof(arr[i].last_name), 1, binary);
-		printf_s("Фамилия %d человека: %s\n", i + 1, arr[i].last_name);
-
-		fread(&arr[i].day, sizeof(int), 1, binary);
-		printf_s("День поступления %d человека на работу: %d\n", i + 1, arr[i].day);
-
-		fread(&arr[i].month, sizeof(int), 1, binary);
-		printf_s("Месяц поступления %d человека на работу: %d\n", i + 1, arr[i].month);
-
-		fread(&arr[i].year, sizeof(int), 1, binary);
-		printf_s("Год поступления %d человека на работу: %d\n", i + 1, arr[i].year);
-
-		sp();
-	}*/
-
-	fread(arr, sizeof(arr), n, binary);
+	fread(arr, sizeof(arr[employees_max]), employees_max, binary);
 
 	printf_s("Массив прочитан из бинарного файла!\n");
 	sp();
-	return n;
+	return employees_max;
 }
 
 // Функция получения способа заполнения массива.
@@ -170,6 +151,7 @@ int get_input_way() {
 }
 
 //===========================================================================================//
+//                                                   -=[ Функции ввода массива ]=-
 
 /*                 Функция вывода массива на экран.
                          На входе получает:
@@ -198,7 +180,6 @@ void array_print(struct employees* arr, int array_size) {
 	printf_s("Люди, поступившие на работу %d.%d.%d:\n", day, month, year);
 	for (int i = 0; i < array_size; i++)
 	{
-		printf_s("[debug] %s - %d.%d.%d\n\n", arr[i].last_name, arr[i].day, arr[i].month, arr[i].year);
 		if (arr[i].day == day && arr[i].month == month && arr[i].year == year)
 		{
 			count++;
@@ -211,30 +192,13 @@ void array_print(struct employees* arr, int array_size) {
 	sp();
 }
 
-void array_tobinary(struct employees* arr, int array_size) {
+void array_tobinary(struct employees* arr) {
 	FILE* binary;
 	errno_t err;
 	int line = 1;
 	err = fopen_s(&binary, "output.bin", "wb");
 
-	/*fwrite(&array_size, sizeof(array_size), 1, binary);
-
-	for (int i = 0; i < array_size; i++) {
-		fwrite(&arr[i].last_name, sizeof(arr[i].last_name), 1, binary);
-		printf_s("Фамилия %d человека: %s\n", i + 1, arr[i].last_name);
-
-		fwrite(&arr[i].day, sizeof(int), 1, binary);
-		printf_s("День поступления %d человека на работу: %d\n", i + 1, arr[i].day);
-
-		fwrite(&arr[i].month, sizeof(int), 1, binary);
-		printf_s("Месяц поступления %d человека на работу: %d\n", i + 1, arr[i].month);
-
-		fwrite(&arr[i].year, sizeof(int), 1, binary);
-		printf_s("Год поступления %d человека на работу: %d\n", i + 1, arr[i].year);
-		sp();
-	}*/
-
-	fwrite(arr, sizeof(arr), n, binary);
+	fwrite(arr, sizeof(arr[employees_max]), employees_max, binary);
 
 	fclose(binary);
 	printf_s("Записан в бинарный файл!\n");
@@ -259,7 +223,7 @@ void output(struct employees* arr, int array_size) {
 	switch (output_way) // Обработка введённого способа вывода массива
 	{
 	case 1: array_print(arr, array_size); break;                                     // Вывод массива на экран
-	case 2: {array_tobinary(arr, array_size); array_print(arr, array_size); } break;  // Вывод массива в бинарный файл и на экран
+	case 2: {array_tobinary(arr); array_print(arr, array_size); } break;  // Вывод массива в бинарный файл и на экран
 	}
 }
 
