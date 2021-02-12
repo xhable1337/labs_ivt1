@@ -31,7 +31,7 @@
 <фамилия_n>
 <день_n>
 <месяц_n>
-<год_n> 
+<год_n>
 */
 
 // Декоративная функция для вывода.
@@ -56,37 +56,29 @@ int array_input(struct employees* arr) {
 	int array_size;
 	printf_s("Введите размерность массива: "); scanf_s("%d", &array_size);
 	sp();
-	int line = 1; int element;
+	int element;
 	for (int i = 0; i < array_size; i++)
 	{
-		switch (line)
-		{
-		case 1: printf("Введите фамилию %d человека: ", i + 1); scanf_s("%s", &arr[i].last_name, 30);
-		case 2: {
-			do {
-				printf("Введите день поступления %d человека на работу: ", i + 1); scanf_s("%d", &element);
+		printf("Введите фамилию %d человека: ", i + 1); scanf_s("%s", &arr[i].last_name, 30);
 
-				if (element < 1 || element > 31) { sp(); printf_s("[!] Введён некорректный день!\n"); sp(); }
-				else arr[i].day = element;
-			} while (element < 1 || element > 31);
-		}
-		case 3: {
-			do {
-				printf("Введите месяц поступления %d человека на работу: ", i + 1); scanf_s("%d", &element);
+		do {
+			printf("Введите день поступления %d человека на работу: ", i + 1); scanf_s("%d", &element);
 
-				if (element < 1 || element > 12) { sp(); printf_s("[!] Введён некорректный месяц!\n"); sp(); }
-				else arr[i].month = element;
-			} while (element < 1 || element > 12);
-		}
-		case 4: {
-			printf("Введите год поступления %d человека на работу: ", i + 1); scanf_s("%d", &arr[i].year);
-			sp();
-			line = 0;
-		}
-		}
+			if (element < 1 || element > 31) { sp(); printf_s("[!] Введён некорректный день!\n"); sp(); }
+			else arr[i].day = element;
+		} while (element < 1 || element > 31);
 
-		line++;
+		do {
+			printf("Введите месяц поступления %d человека на работу: ", i + 1); scanf_s("%d", &element);
+
+			if (element < 1 || element > 12) { sp(); printf_s("[!] Введён некорректный месяц!\n"); sp(); }
+			else arr[i].month = element;
+		} while (element < 1 || element > 12);
+
+		printf("Введите год поступления %d человека на работу: ", i + 1); scanf_s("%d", &arr[i].year);
+		sp();
 	}
+
 	return array_size;
 }
 
@@ -96,37 +88,25 @@ int array_fromfile(struct employees* arr) {
 	FILE* file;
 	int element = 0;
 	int array_size = 0;
-	int line = 1;
 	err = fopen_s(&file, "input.txt", "rt");
 	do {
 		if (err == 0)
 		{
 			fscanf_s(file, "%d", &array_size);
 			for (int i = 0; i < array_size; i++) {
-				fscanf_s(file, "%d", &element);
-				switch (line)
-				{
-				case 1: {
-					fscanf_s(file, "%s", &arr[i].last_name, 30);
-					printf_s("Фамилия %d человека: %s\n", i + 1, arr[i].last_name);
-				}
-				case 2: {
-					fscanf_s(file, "%d", &arr[i].day);
-					printf_s("День поступления %d человека на работу: %d\n", i + 1, arr[i].day);
-				}
-				case 3: {
-					fscanf_s(file, "%d", &arr[i].month);
-					printf_s("Месяц поступления %d человека на работу: %d\n", i + 1, arr[i].month);
-				}
-				case 4: {
-					fscanf_s(file, "%d", &arr[i].year);
-					printf_s("Год поступления %d человека на работу: %d\n", i + 1, arr[i].year);
-					line = 0;
-					sp();
-				}
-				}
+				fscanf_s(file, "%s", &arr[i].last_name, 30);
+				printf_s("Фамилия %d человека: %s\n", i + 1, arr[i].last_name);
+				
+				fscanf_s(file, "%d", &arr[i].day);
+				printf_s("День поступления %d человека на работу: %d\n", i + 1, arr[i].day);
+				
+				fscanf_s(file, "%d", &arr[i].month);
+				printf_s("Месяц поступления %d человека на работу: %d\n", i + 1, arr[i].month);
+				
+				fscanf_s(file, "%d", &arr[i].year);
+				printf_s("Год поступления %d человека на работу: %d\n", i + 1, arr[i].year);
 
-				line++;
+				sp();
 			}
 		}
 		else { printf("Произошла ошибка при считывании файла."); exit(500); }
@@ -142,37 +122,24 @@ int array_frombinary(struct employees* arr) {
 	FILE* binary;
 	errno_t err;
 	int array_size;
-	int line = 1;
 	err = fopen_s(&binary, "input.bin", "rb");
-	fread(&array_size, 1, sizeof(array_size), binary);
+	fread(&array_size, sizeof(array_size), 1, binary);
 
 	for (int i = 0; i < array_size; i++) {
+		fread(&arr[i].last_name, 1, sizeof(arr[i].last_name), binary);
+		printf_s("Фамилия %d человека: %s\n", i + 1, arr[i].last_name);
 
-		switch (line)
-		{
-		case 1: {
-			fread(&arr[i].last_name, 1, sizeof(arr[i].last_name), binary);
-			printf_s("Фамилия %d человека: %s\n", i + 1, arr[i].last_name);
-		}
-		case 2: {
-			fread(&arr[i].day, 1, sizeof(int), binary);
-			printf_s("День поступления %d человека на работу: %d\n", i + 1, arr[i].day);
-		}
-		case 3: {
-			fread(&arr[i].month, 1, sizeof(int), binary);
-			printf_s("Месяц поступления %d человека на работу: %d\n", i + 1, arr[i].month);
-		}
-		case 4: {
-			fread(&arr[i].year, 1, sizeof(int), binary);
-			printf_s("Год поступления %d человека на работу: %d\n", i + 1, arr[i].year);
-			line = 0;
-			sp();
-		}
-		}
+		fread(&arr[i].day, sizeof(int), 1, binary);
+		printf_s("День поступления %d человека на работу: %d\n", i + 1, arr[i].day);
 
-		line++;
+		fread(&arr[i].month, sizeof(int), 1, binary);
+		printf_s("Месяц поступления %d человека на работу: %d\n", i + 1, arr[i].month);
+
+		fread(&arr[i].year, sizeof(int), 1, binary);
+		printf_s("Год поступления %d человека на работу: %d\n", i + 1, arr[i].year);
+		sp();
 	}
-	//fread(&arr, 100, sizeof(arr), binary);
+	
 	printf_s("Массив прочитан из бинарного файла!\n");
 	sp();
 	return array_size;
@@ -206,7 +173,6 @@ int get_input_way() {
 * arr - указатель на массив
 * array_size - размерность массива
 */
-
 void array_print(struct employees* arr, int array_size) {
 	int count = 0;
 	int day, month, year;
@@ -246,36 +212,23 @@ void array_print(struct employees* arr, int array_size) {
 void array_tobinary(struct employees* arr, int array_size) {
 	FILE* binary;
 	errno_t err;
-	int line = 1;
 	err = fopen_s(&binary, "output.bin", "wb");
 
 	fwrite(&array_size, 1, sizeof(array_size), binary);
 
 	for (int i = 0; i < array_size; i++) {
+		fwrite(&arr[i].last_name, sizeof(arr[i].last_name), 1, binary);
+		printf_s("Фамилия %d человека: %s\n", i + 1, arr[i].last_name);
 
-		switch (line)
-		{
-		case 1: {
-			fwrite(&arr[i].last_name, 1, sizeof(arr[i].last_name), binary);
-			printf_s("Фамилия %d человека: %s\n", i + 1, arr[i].last_name);
-		}
-		case 2: {
-			fwrite(&arr[i].day, 1, sizeof(int), binary);
-			printf_s("День поступления %d человека на работу: %d\n", i + 1, arr[i].day);
-		}
-		case 3: {
-			fwrite(&arr[i].month, 1, sizeof(int), binary);
-			printf_s("Месяц поступления %d человека на работу: %d\n", i + 1, arr[i].month);
-		}
-		case 4: {
-			fwrite(&arr[i].year, 1, sizeof(int), binary);
-			printf_s("Год поступления %d человека на работу: %d\n", i + 1, arr[i].year);
-			line = 0;
-			sp();
-		}
-		}
+		fwrite(&arr[i].day, sizeof(int), 1, binary);
+		printf_s("День поступления %d человека на работу: %d\n", i + 1, arr[i].day);
 
-		line++;
+		fwrite(&arr[i].month, sizeof(int), 1, binary);
+		printf_s("Месяц поступления %d человека на работу: %d\n", i + 1, arr[i].month);
+
+		fwrite(&arr[i].year, sizeof(int), 1, binary);
+		printf_s("Год поступления %d человека на работу: %d\n", i + 1, arr[i].year);
+		sp();
 	}
 	fclose(binary);
 	printf_s("Записан в бинарный файл!\n");
@@ -300,7 +253,7 @@ void output(struct employees* arr, int array_size) {
 	switch (output_way) // Обработка введённого способа вывода массива
 	{
 	case 1: array_print(arr, array_size); break;                                     // Вывод массива на экран
-	case 2: {array_tobinary(arr, array_size); array_print(arr, array_size);} break;  // Вывод массива в бинарный файл и на экран
+	case 2: {array_tobinary(arr, array_size); array_print(arr, array_size); } break;  // Вывод массива в бинарный файл и на экран
 	}
 }
 
@@ -338,4 +291,4 @@ int main() {
 
 
 	return 0; // Завершение программы
-}
+}ы

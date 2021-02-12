@@ -15,10 +15,11 @@ void sp() {
 
 int main() {
 	setlocale(LC_ALL, "Russian");
-	int part_count = 1, logging = 1;
-	//printf_s("Введите начальное количество клеток: "); scanf_s("%d", &part_count);
+	int hour_count = 24, part_count = 1, logging = 1;
 
-	for (int i = 3; i <= 24; i += 3) {part_count *= 2;}
+	//printf_s("Введите количество часов: "); scanf_s("%d", &hour_count);
+
+	for (int i = 3; i <= hour_count; i += 3) part_count *= 2;
 
 	sp();
 	printf_s("Конечное количество клеток амёбы: %d\n", part_count);

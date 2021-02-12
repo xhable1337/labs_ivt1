@@ -14,24 +14,26 @@ void sp() {
 	printf("------------------------------------------------\n");
 }
 
+// Выводит на экран текстовое значение достоинства и масти карты, обозначенных числами.
 void card_to_text(int value, int suit) {
+
 	printf_s("Введённая карта: ");
 	switch (value)	{
-		case 6: printf_s("шестёрка "); break;
-		case 7: printf_s("семёрка "); break;
-		case 8: printf_s("восьмёрка "); break;
-		case 9: printf_s("девятка "); break;
-		case 10: printf_s("десятка "); break;
-		case 11: printf_s("валет "); break;
-		case 12: printf_s("дама "); break;
-		case 13: printf_s("король "); break;
-		case 14: printf_s("туз "); break;
+	case 6: printf_s("шестёрка "); break;
+	case 7: printf_s("семёрка "); break;
+	case 8: printf_s("восьмёрка "); break;
+	case 9: printf_s("девятка "); break;
+	case 10: printf_s("десятка "); break;
+	case 11: printf_s("валет "); break;
+	case 12: printf_s("дама "); break;
+	case 13: printf_s("король "); break;
+	case 14: printf_s("туз "); break;
 	}
 
 	switch (suit) {
 		case 1: printf_s("пик.\n"); break;
-		case 2: printf_s("треф.\n"); break;
 		case 3: printf_s("бубен.\n"); break;
+		case 2: printf_s("треф.\n"); break;
 		case 4: printf_s("червей.\n"); break;
 	}
 

@@ -12,11 +12,28 @@ void sp() {
 	printf("------------------------------------------------\n");
 }
 
+double count(x, operation) {
+	double result = 0;
+	double pi = 3.14159265;
+
+	switch (operation)
+	{
+	case 1: result = acos(x); break;
+	case 2: result = pi / 2 - atan(x); break;
+	case 3: result = log10(x); break;
+	case 4: result = sqrt(x); break;
+	default:
+		printf("Введён неверный номер операции!"); break;
+	}
+
+	return result;
+}
+
 int main() {
 	setlocale(LC_ALL, "Russian");
 	int x, operation;
 	double result = 0;
-	double pi = 3.14159265;
+	
 	sp();
 	printf_s("Введите число: "); scanf_s("%d", &x);
 	sp();
@@ -28,15 +45,8 @@ int main() {
 		"\n\nВведите номер операции, которую хотите выполнить с данным числом: "); scanf_s("%d", &operation);
 	sp();
 
-	switch (operation)
-	{
-	case 1: result = acos(x); break;
-	case 2: result = pi / 2 - atan(x); break;
-	case 3: result = log10(x); break;
-	case 4: result = sqrt(x); break;
-	default:
-		printf("Введён неверный номер операции!"); break;
-	}
+	result = count(operation);
+
 
 	if isnan(result) { printf_s("Результат вычислений не определен. Повторите попытку, введя другое число.\n"); }
 	else { printf_s("Результат вычислений: %lf\n", result); }

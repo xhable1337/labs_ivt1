@@ -12,17 +12,27 @@ void sp() {
 	printf("------------------------------------------------\n");
 }
 
+// Возвращает результат расчёта формулы относительно натурального n.
+double calc(int n) {
+	double P = 1;
+	for (int i = 1; i <= n; i++)
+	{
+		P *= (1.0 + (1.0 / ((double)i * (double)i)));
+	}
+	return P;
+}
+
 int main() {
 	setlocale(LC_ALL, "Russian");
 	int n; double P = 1;
 
-	sp();
-	printf_s("Введите натуральное число n: "); scanf_s("%d", &n);
+	do {
+		sp();
+		printf_s("Введите натуральное число n: "); scanf_s("%d", &n);
+		if (n <= 0) printf("[!] Введённое число не является натуральным. Повторите ввод.\n");
+	} while (n <= 0);
 
-	for (int i = 1; i < n + 1; i++)
-	{
-		P *= (1 + (1 / pow(i, 2)));
-	}
+	P = calc(n);
 
 	sp();
 	printf_s("Произведение P = %lf\n", P);

@@ -23,40 +23,64 @@ void sp() {
 	printf("------------------------------------------------\n");
 }
 
+// Возвращает значение кусочно-заданной функции от x.
+double func(double x) {
+	double result = 1;
+	if (x >= 1)
+	{
+		result = 2 * exp(x);
+
+	}
+
+	else if (x < 0)
+	{
+		result = 1.0;
+	}
+
+	else
+	{
+		result = 2 / (x + 2);
+	}
+
+	return result;
+}
+
+// Просчитывает диапазон [A; B] кусочно-заданной функцией с шагом C и выводит промежуточные значения на экран.
+double calc(double A, double B, double C) {
+	double result = 1;
+
+	for (double x = A; x <= B; x += C)
+	{
+		result = func(x);
+		printf_s("Диапазон: [%lf; %lf] | Шаг: %lf\nЗначение x: %lf\nРезультат вычислений: %lf\n", A, B, C, x, result);
+		sp();
+	}
+
+}
+
 int main() {
 	setlocale(LC_ALL, "Russian");
 	double x = 0, result = 1, A = 0, B = 0, C = 0;
 
 	sp();
-	//printf_s("Введите переменную x: "); scanf_s("%lf", &x);
 	printf_s("Введите левую границу диапазона [A; B]: "); scanf_s("%lf", &A);
-	sp();
-	printf_s("Введите правую границу диапазона [A; B]: "); scanf_s("%lf", &B);
-	sp();
-	printf_s("Введите шаг прохода диапазона (C): "); scanf_s("%lf", &C);
-	sp();
 
-	for (double x = A; x <= B; x += C)
-	{
-		if (x >= 1)
-		{
-			result = 2 * exp(x);
-
-		}
-
-		if (x < 0)
-		{
-			result = 1.0;
-		}
-
-		if (0 <= x || x < 1)
-		{
-			result = 2 / (x + 2);
-		}
-	
-		printf_s("Диапазон: [%lf; %lf] | Шаг: %lf\nЗначение x: %lf\nРезультат вычислений: %lf\n", A, B, C, x, result);
+	do {
 		sp();
-	}
+		printf_s("Введите правую границу диапазона [A; B]: "); scanf_s("%lf", &B);
+		if (B <= A) printf("[!] Правая граница диапазона не может быть меньше левой. Повторите ввод.\n");
+	} while (B <= A);
+	
+	do
+	{
+		sp();
+		printf_s("Введите шаг прохода диапазона (C): "); scanf_s("%lf", &C);
+		if (C <= 0) printf_s("[!] Шаг должен быть положительным! Повторите ввод.\n");
+	} while (C <= 0);
+	
+	sp();
+
+	calc(A, B, C);
 
 	return 0;
 }

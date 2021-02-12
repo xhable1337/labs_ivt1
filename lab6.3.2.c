@@ -16,6 +16,10 @@ struct date {
 	int day, month;
 };
 
+/* Принимает на вход день и месяц и проверяет ввод даты на правильность.
+Если она верна, возвращает количество дней в месяце.
+В обратном случае вывод будет равен нулю.
+*/
 int date_check(int day, int month) {
 	int day_count = 0;
 
@@ -27,6 +31,7 @@ int date_check(int day, int month) {
 	else return 0;
 }
 
+// Принимает на входе массив структуры даты и выводит в следующий элемент этого массива день и месяц следующей даты.
 void date_next(struct date* arr) {
 	int day = arr[0].day; int month = arr[0].month;
 	int day_count = date_check(day, month);

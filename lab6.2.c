@@ -13,8 +13,11 @@ void sp() {
 	printf("------------------------------------------------\n");
 }
 
-int main() {
-	setlocale(LC_ALL, "Russian");
+struct set_summary {
+	int max, price;
+};
+
+void set_count(struct set_summary* sets) {
 	int price, max_sum = 0, sum = 0, max = 0;
 
 	for (int set = 1; set < 5; set++)
@@ -34,8 +37,17 @@ int main() {
 		}
 		sum = 0;
 	}
+
+	sets[0].max = max; sets[0].price = max_sum;
+}
+
+int main() {
+	setlocale(LC_ALL, "Russian");
+	struct set_summary sets[1];
+	set_count(sets);
+
 	sp();
-	printf_s("Самый дорогой комплект: %d\nЕго стоимость: %d\n", max, max_sum);
+	printf_s("Самый дорогой комплект: %d\nЕго стоимость: %d\n", sets[0].max, sets[0].price);
 	sp();
 	return 0;
 }
