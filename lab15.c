@@ -34,7 +34,7 @@ void sp() {
 	printf("------------------------------------------------\n");
 }
 
-const char filename_in[30] = "input.txt";
+const char filename_in[] = "input.txt";
 
 struct employees         // Инициализация структуры работников
 {

@@ -43,9 +43,9 @@ struct employees                      // Инициализация структ
 // Конфигурация программы
 
 int employees_max = 30;               // Максимальное количество элементов в массиве структуры employees
-const char txt_filename_in[30] = "input.txt";      // Путь к файлу .txt, из которого нужно считать массив
-const char bin_filename_in[30] = "input.bin";      // Путь к файлу .bin, из которого нужно считать массив
-const char bin_filename_out[30] = "output.bin";    // Путь к файлу .bin, в который нужно записать массив
+const char txt_filename_in[] = "input.txt";      // Путь к файлу .txt, из которого нужно считать массив
+const char bin_filename_in[] = "input.bin";      // Путь к файлу .bin, из которого нужно считать массив
+const char bin_filename_out[] = "output.bin";    // Путь к файлу .bin, в который нужно записать массив
 
 //===========================================================================================//
 //                                                   -=[ Функции ввода массива ]=-
