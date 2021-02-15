@@ -34,6 +34,8 @@ void sp() {
 	printf("------------------------------------------------\n");
 }
 
+const char filename_in[30] = "input.txt";
+
 struct employees         // Инициализация структуры работников
 {
 	char last_name[30];
@@ -79,7 +81,7 @@ int array_input(struct employees* arr) {
 }
 
 // Функция получения массива из текстового файла input.txt (должен быть в одном каталоге с исполняемым!)
-int array_fromfile(struct employees* arr) {
+int array_fromfile(struct employees* arr, const char filename[]) {
 	errno_t err;
 	FILE* file;
 	int array_size = 0;
@@ -114,35 +116,6 @@ int array_fromfile(struct employees* arr) {
 	return array_size;
 }
 
-// Функция получения массива из бинарного файла input.bin (должен быть в одном каталоге с исполняемым!)
-int array_frombinary(struct employees* arr) {
-	FILE* binary;
-	errno_t err;
-	int array_size;
-	err = fopen_s(&binary, "input.bin", "rb");
-	fread(&array_size, sizeof(array_size), 1, binary);
-
-	for (int i = 0; i < array_size; i++) {
-		fread(&arr[i].last_name, sizeof(arr[i].last_name), 1, binary);
-		printf_s("Фамилия %d человека: %s\n", i + 1, arr[i].last_name);
-
-		fread(&arr[i].day, sizeof(int), 1, binary);
-		printf_s("День поступления %d человека на работу: %d\n", i + 1, arr[i].day);
-
-		fread(&arr[i].month, sizeof(int), 1, binary);
-		printf_s("Месяц поступления %d человека на работу: %d\n", i + 1, arr[i].month);
-
-		fread(&arr[i].year, sizeof(int), 1, binary);
-		printf_s("Год поступления %d человека на работу: %d\n", i + 1, arr[i].year);
-
-		sp();
-	}
-
-	printf_s("Массив прочитан из бинарного файла!\n");
-	sp();
-	return array_size;
-}
-
 // Функция получения способа заполнения массива.
 int get_input_way() {
 	int input_way;
@@ -152,14 +125,13 @@ int get_input_way() {
 		printf_s("Способы заполнения массива:\n"
 			"1) С клавиатуры\n"
 			"2) Из файла 'input.txt'\n"
-			"3) Из бинарного файла 'input.bin'\n\n"
 			"Каким способом вы хотите заполнить массив? "); scanf_s("%d", &input_way);
 		sp();
-		if (input_way > 3 || input_way < 1) {
+		if (input_way > 2 || input_way < 1) {
 			printf_s("Неверное значение способа заполнения массива!\n"
-				"Значение должно быть от 1 до 3.\n");
+				"Значение должно быть от 1 до 2.\n");
 		}
-	} while (input_way > 3 || input_way < 1);
+	} while (input_way > 2 || input_way < 1);
 	return input_way;
 }
 
@@ -204,56 +176,6 @@ void array_print(struct employees* arr, int array_size) {
 	sp();
 }
 
-void array_tobinary(struct employees* arr, int array_size) {
-	FILE* binary;
-	errno_t err;
-	int line = 1;
-	err = fopen_s(&binary, "output.bin", "wb");
-
-	fwrite(&array_size, sizeof(array_size), 1, binary);
-
-	for (int i = 0; i < array_size; i++) {
-		fwrite(&arr[i].last_name, sizeof(arr[i].last_name), 1, binary);
-		printf_s("Фамилия %d человека: %s\n", i + 1, arr[i].last_name);
-
-		fwrite(&arr[i].day, sizeof(int), 1, binary);
-		printf_s("День поступления %d человека на работу: %d\n", i + 1, arr[i].day);
-
-		fwrite(&arr[i].month, sizeof(int), 1, binary);
-		printf_s("Месяц поступления %d человека на работу: %d\n", i + 1, arr[i].month);
-
-		fwrite(&arr[i].year, sizeof(int), 1, binary);
-		printf_s("Год поступления %d человека на работу: %d\n", i + 1, arr[i].year);
-		sp();
-	}
-
-	fclose(binary);
-	printf_s("Записан в бинарный файл!\n");
-	sp();
-}
-
-void output(struct employees* arr, int array_size) {
-	int output_way;
-	do
-	{
-		printf_s("Способы вывода массива:\n"
-			"1) На экран\n"
-			"2) В бинарный файл 'output.bin'\n\n"
-			"Каким способом вы хотите вывести массив? "); scanf_s("%d", &output_way);
-		sp();
-		if (output_way > 2 || output_way < 1) {
-			printf_s("Неверное значение способа заполнения массива!\n"
-				"Значение должно быть от 1 до 2.\n");
-		}
-	} while (output_way > 2 || output_way < 1);
-
-	switch (output_way) // Обработка введённого способа вывода массива
-	{
-	case 1: array_print(arr, array_size); break;                                     // Вывод массива на экран
-	case 2: {array_tobinary(arr, array_size); array_print(arr, array_size); } break;  // Вывод массива в бинарный файл и на экран
-	}
-}
-
 // ============================================================================ \\
 \\ ============================================================================ //
 
@@ -270,22 +192,15 @@ int main() {
 	case 1: { // Выбран ввод с клавиатуры
 		int array_size = array_input(arr);        // Функция ввода чисел с клавиатуры
 
-		output(arr, array_size); // Функция вывода массива
+		array_print(arr, array_size); // Функция вывода массива на экран 
 	} break;
 
 	case 2: { // Выбран ввод из файла
-		int array_size = array_fromfile(arr);     // Выбрано заполнение массива из файла
+		int array_size = array_fromfile(arr, filename_in);     // Выбрано заполнение массива из файла
 
-		output(arr, array_size); // Функция вывода массива
-	} break;
-
-	case 3: { // Выбран ввод из бинарного файла
-		int array_size = array_frombinary(arr);   // Выбрано заполнение массива из бинарного файла
-
-		output(arr, array_size); // Функция вывода массива
+		array_print(arr, array_size); // Функция вывода массива на экран 
 	} break;
 	}
-
 
 	return 0; // Завершение программы
 }
