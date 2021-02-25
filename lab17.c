@@ -103,7 +103,6 @@ int* array_fromfile(double arr[100][100], int* array_size, const char filename[]
 	}
 	else { printf("[!] Произошла ошибка при открытии файла."); exit(500); }
 	
-	sp();
 	return array_size;
 }
 
@@ -189,11 +188,11 @@ int get_input_way() {
 	sp();
 	printf_s("Способы заполнения массива:\n"
 		"1) С клавиатуры\n"
-		"2) Из файла 'input.txt'\n"
-		"3) Из бинарного файла 'input.bin'\n"
+		"2) Из файла '%s'\n"
+		"3) Из бинарного файла '%s'\n"
 		"4) Заполнение псевдослучайными числами в заданном диапазоне\n"
 		"5) Заполнение по формуле\n\n"
-		"Каким способом вы хотите заполнить массив? "); 
+		"Каким способом вы хотите заполнить массив? ", txt_filename_in, bin_filename_in); 
 	err = scanf_s("%d", &input_way);
 	sp();
 
@@ -351,9 +350,9 @@ void output(double arr[100][100], int string, int column) {
 	{
 		printf_s("Способы вывода массива:\n"
 			"1) На экран\n"
-			"2) В бинарный файл 'output.bin'\n"
-			"3) В текстовый файл 'output.txt'\n\n"
-			"Каким способом вы хотите вывести массив? "); scanf_s("%d", &output_way);
+			"2) В бинарный файл '%s'\n"
+			"3) В текстовый файл '%s'\n\n"
+			"Каким способом вы хотите вывести массив? ", bin_filename_out, txt_filename_out); scanf_s("%d", &output_way);
 		sp();
 		if (output_way > 3 || output_way < 1) {
 			printf_s("Неверное значение способа заполнения массива!\n"
@@ -392,12 +391,14 @@ int main() {
 		array_size = array_fromfile(arr, arr_size, txt_filename_in);
 		string = array_size[0]; column = array_size[1]; // "Распаковка" массива с размерностью основного массива
 		printf_s("Массив успешно прочитан из файла!\n"); // Уведомление об успешном считывании массива
+		sp();
 		break;
 
 	case 3:  // Выбран ввод из бинарного файла
 		array_size = array_frombinary(arr, arr_size, bin_filename_in);
 		string = array_size[0]; column = array_size[1]; // "Распаковка" массива с размерностью основного массива
 		printf_s("Массив успешно прочитан из бинарного файла!\n"); // Уведомление об успешном считывании массива
+		sp();
 		break;
 
 	case 4: // Выбрано заполнения псевдослучайными числами
