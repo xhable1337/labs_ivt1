@@ -34,14 +34,17 @@ b[i][j] = { 0; i = j
 
 // Декоративная функция для вывода.
 void sp() {
-	printf("------------------------------------------------\n");
+	printf_s("------------------------------------------------\n");
 }
 
 /* Директива препроцессора «constants». 
 Если определена, имена файлов являются константами, указанными ниже.
 Если не определена (закомментирована), имена файлов вводятся с клавиатуры.
 */
-//#define constants 
+#define constants
+
+#define string_max 100 // Максимальное количество строк массива
+#define column_max 100 // Максимальное количество столбцов массива
 
 // Устанавливаем имена файлов в зависимости от определения директивы constants
 #ifdef constants
@@ -54,19 +57,19 @@ void sp() {
 //                                                   -=[ Функции ввода массива ]=-
 
 // Заполняет массив arr с клавиатуры и возвращает массив размерностей массива arr.
-int* array_input(double arr[100][100], int* array_size) {
+int* array_input(double arr[string_max][column_max], int* array_size) {
 	int string, column;
 	do
 	{
 		printf_s("Введите количество строк: "); scanf_s("%d", &string);
 		printf_s("Введите количество столбцов: "); scanf_s("%d", &column);
 
-		if (string <= 0 || column <= 0)
+		if (string <= 0 || column <= 0 || string > string_max || column > string_max)
 		{
 			printf_s("[!] Неправильный ввод размерности массива. Повторите ввод.\n");
 			sp();
 		}
-	} while (string <= 0 || column <= 0);
+	} while (string <= 0 || column <= 0 || string > string_max || column > string_max);
 
 	sp();
 	array_size[0] = string; array_size[1] = column;
@@ -84,7 +87,7 @@ int* array_input(double arr[100][100], int* array_size) {
 }
 
 // Заполняет массив arr из текстового файла filename и возвращает массив размерностей массива arr.
-int* array_fromfile(double arr[100][100], int* array_size, const char filename[]) {
+int* array_fromfile(double arr[string_max][column_max], int* array_size, char* filename) {
 	errno_t err;
 	FILE* file;
 	int element = 0;
@@ -95,6 +98,11 @@ int* array_fromfile(double arr[100][100], int* array_size, const char filename[]
 	{
 		fscanf_s(file, "%d", &string);
 		fscanf_s(file, "%d", &column);
+		if (string <= 0 || column <= 0 || string > string_max || column > string_max)
+		{
+			printf_s("[!] Размерность массива неверна.");
+			exit(500);
+		}
 		array_size[0] = string; array_size[1] = column;
 
 		for (int i = 0; i < string; i++)
@@ -109,13 +117,13 @@ int* array_fromfile(double arr[100][100], int* array_size, const char filename[]
 
 		fclose(file);
 	}
-	else { printf("[!] Произошла ошибка при открытии файла."); exit(500); }
+	else { printf_s("[!] Произошла ошибка при открытии файла."); exit(500); }
 
 	return array_size;
 }
 
 // Заполняет массив arr псевдослучайными числами в заданном диапазоне и возвращает массив размерностей массива arr.
-int* array_random(double arr[100][100], int* array_size) {
+int* array_random(double arr[string_max][column_max], int* array_size) {
 	double random;
 	int string, column, A, B, temp;
 	srand(time(NULL));
@@ -125,12 +133,12 @@ int* array_random(double arr[100][100], int* array_size) {
 		printf_s("Введите количество строк: "); scanf_s("%d", &string);
 		printf_s("Введите количество столбцов: "); scanf_s("%d", &column);
 
-		if (string <= 0 || column <= 0)
+		if (string <= 0 || column <= 0 || string > string_max || column > string_max)
 		{
 			printf_s("[!] Неправильный ввод размерности массива. Повторите ввод.\n");
 			sp();
 		}
-	} while (string <= 0 || column <= 0);
+	} while (string <= 0 || column <= 0 || string > string_max || column > string_max);
 
 	sp();
 	printf_s("Введите начало диапазона: "); scanf_s("%d", &A);
@@ -160,7 +168,7 @@ int* array_random(double arr[100][100], int* array_size) {
 }
 
 // Заполняет массив arr из бинарного файла filename и возвращает массив размерностей массива arr.
-int* array_frombinary(double arr[100][100], int* array_size, char* filename) {
+int* array_frombinary(double arr[string_max][column_max], int* array_size, char* filename) {
 	FILE* binary;
 	errno_t err;
 	int string, column;
@@ -171,6 +179,13 @@ int* array_frombinary(double arr[100][100], int* array_size, char* filename) {
 	{
 		fread(&string, sizeof(string), 1, binary);
 		fread(&column, sizeof(column), 1, binary);
+
+		if (string <= 0 || column <= 0 || string > string_max || column > string_max)
+		{
+			printf_s("[!] Размерность массива неверна.");
+			exit(500);
+		}
+
 		array_size[0] = string; array_size[1] = column;
 
 		for (int i = 0; i < column; i++)
@@ -180,7 +195,7 @@ int* array_frombinary(double arr[100][100], int* array_size, char* filename) {
 
 		fclose(binary);
 	}
-	else { printf("[!] Произошла ошибка при открытии файла."); exit(500); }
+	else { printf_s("[!] Произошла ошибка при открытии файла."); exit(500); }
 
 
 
@@ -238,19 +253,19 @@ int get_input_way() {
 }
 
 // Заполняет массив arr по формуле и возвращает массив размерностей массива arr.
-int* array_formula(double arr[100][100], int* array_size) {
+int* array_formula(double arr[string_max][column_max], int* array_size) {
 	int string, column;
 	do
 	{
 		printf_s("Введите количество строк: "); scanf_s("%d", &string);
 		printf_s("Введите количество столбцов: "); scanf_s("%d", &column);
 
-		if (string <= 0 || column <= 0)
+		if (string <= 0 || column <= 0 || string > string_max || column > string_max)
 		{
 			printf_s("[!] Неправильный ввод размерности массива. Повторите ввод.\n");
 			sp();
 		}
-	} while (string <= 0 || column <= 0);
+	} while (string <= 0 || column <= 0 || string > string_max || column > string_max);
 
 	array_size[0] = string; array_size[1] = column;
 
@@ -272,7 +287,7 @@ int* array_formula(double arr[100][100], int* array_size) {
 // ======================================================================================================
 
 // Возвращает среднее арифметическое элементов, стоящих выше главной диагонали.
-double array_processing(double arr[100][100], int string, int column) {
+double array_processing(double arr[string_max][column_max], int string, int column) {
 	double sum = 0, count = 0, result = 0;
 
 	for (int i = 0; i < string; i++) {
@@ -294,7 +309,7 @@ double array_processing(double arr[100][100], int string, int column) {
 //                                                   -=[ Функции вывода массива ]=-
 
 // Выводит массив arr размерностью string×column в окно консоли.
-void array_print(double arr[100][100], int string, int column) {
+void array_print(double arr[string_max][column_max], int string, int column) {
 	for (int i = 0; i < string; i++)
 	{
 		for (int j = 0; j < column; j++)
@@ -308,7 +323,7 @@ void array_print(double arr[100][100], int string, int column) {
 }
 
 // Записывает массив arr размерностью string×column в бинарный файл filename.
-void array_tobinary(double arr[100][100], int string, int column, char* filename) {
+void array_tobinary(double arr[string_max][column_max], int string, int column, char* filename) {
 	FILE* binary;
 	errno_t err;
 	err = fopen_s(&binary, filename, "wb");
@@ -318,7 +333,6 @@ void array_tobinary(double arr[100][100], int string, int column, char* filename
 		fwrite(&string, sizeof(string), 1, binary);
 		fwrite(&column, sizeof(column), 1, binary);
 
-
 		for (int i = 0; i < column; i++)
 		{
 			fwrite(&arr[i][0], sizeof(arr[0][0]), string, binary);
@@ -326,7 +340,7 @@ void array_tobinary(double arr[100][100], int string, int column, char* filename
 
 		fclose(binary);
 	}
-	else { printf("[!] Произошла ошибка при открытии файла."); exit(500); }
+	else { printf_s("[!] Произошла ошибка при открытии файла."); exit(500); }
 
 
 	printf_s("Записан в бинарный файл!\n");
@@ -337,7 +351,7 @@ void array_tobinary(double arr[100][100], int string, int column, char* filename
 }
 
 // Записывает массив arr размерностью string×column в текстовый файл filename.
-void array_tofile(double arr[100][100], int string, int column, char* filename) {
+void array_tofile(double arr[string_max][column_max], int string, int column, char* filename) {
 	FILE* file;
 	errno_t err;
 	err = fopen_s(&file, filename, "wt");
@@ -358,12 +372,12 @@ void array_tofile(double arr[100][100], int string, int column, char* filename) 
 		fprintf_s(file, "\nСреднее арифметическое элементов выше главной диагонали: %lf\n", result);
 		fclose(file);
 	}
-	else { printf("[!] Произошла ошибка при открытии файла."); exit(500); }
+	else { printf_s("[!] Произошла ошибка при открытии файла."); exit(500); }
 
 }
 
 // Выбирает способ вывода массива.
-void output(double arr[100][100], int string, int column) {
+void output(double arr[string_max][column_max], int string, int column) {
 	int output_way;
 	char filename[100];
 	do
@@ -433,7 +447,7 @@ int main() {
 	setlocale(LC_ALL, "Russian"); // Установка русской локализации
 	system("chcp 1251"); // Установка русской локализации для даннх ввода/вывода
 	system("cls");       // Очистка окна консоли от служебных сообщений
-	double arr[100][100]; // Инициализация структуры в виде массива
+	double arr[string_max][column_max]; // Инициализация структуры в виде массива
 	int string = 0, column = 0, arr_size[2]; // Инициализация остальных переменных
 	int input_way = get_input_way(); // Получение способа заполнения массива
 	int* array_size;
