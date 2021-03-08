@@ -10,7 +10,7 @@
 значение указателя b не равны? 
 */
 
-int main(int argc, char const* argv[]) {
+int main() {
     setlocale(LC_ALL, "Russian");
     int a, * b;
     a = 134;
