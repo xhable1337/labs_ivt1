@@ -14,22 +14,15 @@ void sp() {
 	printf("------------------------------------------------\n");
 }
 
-/* 
-Принимает указатели на координаты вершин треугольника ABC (ax, ay, bx, by, cx, cy), выполняет вычисление площади и длин сторон 
+/*
+Принимает указатели на координаты вершин треугольника ABC (ax, ay, bx, by, cx, cy), выполняет вычисление площади и длин сторон
 и записывает в соответствующие указатели S, ab_length, bc_length, ac_length.
 */
-void calculations(double* ax, double* ay, double* bx, double* by, double* cx, double* cy, double* S, double* ab_length, double* bc_length, double* ac_length);
+void calculations(double ax, double ay, double bx, double by, double cx, double cy, double* S, double* ab_length, double* bc_length, double* ac_length);
 
 int main(void) {
 	setlocale(LC_ALL, "Russian");
 	double ax, ay, bx, by, cx, cy;
-
-	double* p_ax = &ax;
-	double* p_ay = &ay;
-	double* p_bx = &bx;
-	double* p_by = &by;
-	double* p_cx = &cx;
-	double* p_cy = &cy;
 
 	double S, ab_length, bc_length, ac_length;
 	char* explanation[300];
@@ -44,9 +37,9 @@ int main(void) {
 	printf_s("Введите координату y вершины треугольника C: "); scanf_s("%lf", &cy);
 	sp();
 
-	calculations(p_ax, p_ay, p_bx, p_by, p_cx, p_cy, &S, &ab_length, &bc_length, &ac_length);
+	calculations(ax, ay, bx, by, cx, cy, &S, &ab_length, &bc_length, &ac_length);
 
-	if (ab_length + bc_length > ac_length && ab_length + ac_length > bc_length && ac_length + bc_length > ab_length) 
+	if (ab_length + bc_length > ac_length && ab_length + ac_length > bc_length && ac_length + bc_length > ab_length)
 	{
 		printf_s(
 			"Площадь треугольника: %lf\n"
@@ -74,16 +67,16 @@ int main(void) {
 			"Длина стороны AC: %lf\n"
 			"%s\n", ab_length, bc_length, ac_length, *explanation);
 	}
-}	
+}
 
-void calculations(double* ax, double* ay, double* bx, double* by, double* cx, double* cy, double* S, double* ab_length, double* bc_length, double* ac_length) {
+void calculations(double ax, double ay, double bx, double by, double cx, double cy, double* S, double* ab_length, double* bc_length, double* ac_length) {
 
-	*S =      fabs((*bx - *ax) * (*cy - *ay) - (*cx - *ax) * (*by - *ay))
+	*S =          fabs((bx - ax) * (cy - ay) - (cx - ax) * (by - ay))
 		/ //--------------------------------------------------------------
-		                                2.0;
+		                                  2.0;
 
-	*ab_length = sqrt((*bx - *ax) * (*bx - *ax) + (*by - *ay) * (*by - *ay));
-	*bc_length = sqrt((*cx - *bx) * (*cx - *bx) + (*cy - *by) * (*cy - *by));
-	*ac_length = sqrt((*cx - *ax) * (*cx - *ax) + (*cy - *ay) * (*cy - *ay));
+	*ab_length = sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay));
+	*bc_length = sqrt((cx - bx) * (cx - bx) + (cy - by) * (cy - by));
+	*ac_length = sqrt((cx - ax) * (cx - ax) + (cy - ay) * (cy - ay));
 }
 
