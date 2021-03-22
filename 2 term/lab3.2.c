@@ -4,15 +4,18 @@
 #define SCREEN_HEIGHT  700
 #define DELAY_TIME 9000
 
+/* Лабораторная работа 3.2.
+13. Нарисовать ноутбук.
+*/
 
 int main(int argc, char* argv[])
 {
 	int SurfaceW = SCREEN_WIDTH / 2;
-	int SurfaceH = SCREEN_HEIGHT/ 2;
+	int SurfaceH = SCREEN_HEIGHT / 2;
 
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
-		printf_s("SDL_Error:", SDL_GetError());
+		printf_s("[!] При создании окна SDL произошла ошибка. Текст ошибки:\n%s\n\n", SDL_GetError());
 	}
 	else
 	{
@@ -23,51 +26,52 @@ int main(int argc, char* argv[])
 		window = SDL_CreateWindow(u8"Згурский Евгений | Вариант 13", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 		if (window == NULL)
 		{
-			printf_s("SDL_Error", SDL_GetError());
+			printf_s("[!] При создании окна SDL произошла ошибка. Текст ошибки:\n%s\n\n", SDL_GetError());
 		}
 		else
 		{
 			SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, 0);
-			//
-			SDL_SetRenderDrawColor(renderer, 210, 223, 217, 255);
-			SDL_RenderClear(renderer);
-			//
-			SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
 
+			// Фон
+			SDL_SetRenderDrawColor(renderer, 210, 223, 217, 255);
+			SDL_RenderClear(renderer);			
+
+			// Дисплейная рамка
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
 			SDL_Rect rect_2 = { SurfaceW - 155, SurfaceH - 190, 310, 190 };
 			SDL_RenderDrawRect(renderer, &rect_2);
 			SDL_SetRenderDrawColor(renderer, 155, 155, 150, 255);
 			SDL_RenderFillRect(renderer, &rect_2);
 
-
+			// Горящий дисплей
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
 			SDL_Rect rect_1 = { SurfaceW - 150, SurfaceH - 185, 300, 180 };
 			SDL_RenderDrawRect(renderer, &rect_1);
 			SDL_SetRenderDrawColor(renderer, 180, 180, 200, 255);
 			SDL_RenderFillRect(renderer, &rect_1);
 
-
+			// Корпус
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
 			SDL_Rect rect_3 = { SurfaceW - 155, SurfaceH + 8, 310, 156 };
 			SDL_RenderDrawRect(renderer, &rect_3);
 			SDL_SetRenderDrawColor(renderer, 155, 155, 150, 255);
 			SDL_RenderFillRect(renderer, &rect_3);
 			
-
+			// Левая петля крышки
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
 			SDL_Rect rect_4 = { SurfaceW - 146, SurfaceH -3, 14, 14 };
 			SDL_RenderDrawRect(renderer, &rect_4);
 			SDL_SetRenderDrawColor(renderer, 155, 155, 150, 255);
 			SDL_RenderFillRect(renderer, &rect_4);
 
+			// Правая петля крышки
 			SDL_SetRenderDrawColor(renderer, 0, 0, 0, 200);
 			SDL_Rect rect_5 = { SurfaceW + 132, SurfaceH - 3, 14, 14 };
 			SDL_RenderDrawRect(renderer, &rect_5);
 			SDL_SetRenderDrawColor(renderer, 155, 155, 150, 255);
 			SDL_RenderFillRect(renderer, &rect_5);
 
-
+			// Клавиатура
 			int size = 15;
 			int x = SurfaceW - 120;
 			int y = SurfaceH + 32;
