@@ -28,10 +28,10 @@ struct snake {
     int y;
 };
 
-void Body_init(struct snake *B,int count_max) {
+void Body_init(struct snake* B, int count_max) {
     int i;
-    if (PATTERN) {       
-        for (i = 0; i < count_max;i++) {
+    if (PATTERN) {
+        for (i = 0; i < count_max; i++) {
             B[i].x = i;
             B[i].y = 0;
             B[i].m = 3;
@@ -41,7 +41,7 @@ void Body_init(struct snake *B,int count_max) {
         for (i = 0; i < count_max; i++) {
             B[i].x = 0;
             B[i].y = 0;
-            B[i].m = 1-i;
+            B[i].m = 1 - i;
         }
 
     }
@@ -49,7 +49,7 @@ void Body_init(struct snake *B,int count_max) {
 
 void draw_square(SDL_Renderer* renderer, int x, int y) {
     SDL_SetRenderDrawColor(renderer, 180, 180, 200, 255);
-    SDL_Rect rect = { toScreen(x,'x')- pixx,toScreen(y,'y')- pixy, pixx, pixy };
+    SDL_Rect rect = { toScreen(x,'x') - pixx,toScreen(y,'y') - pixy, pixx, pixy };
     SDL_RenderDrawRect(renderer, &rect);
     SDL_RenderFillRect(renderer, &rect);
 }
@@ -87,13 +87,13 @@ void Snake_Movement(SDL_Renderer* renderer, struct snake* B, int body_count) {
                 break;
             }
             }
-            
+
         }
-        
+
     }
     else {
-        for (int i = 0; i < body_count; i++) {         
-            
+        for (int i = 0; i < body_count; i++) {
+
             if (B[i].m < 1) {
                 B[i].m++;
             }
@@ -111,11 +111,11 @@ void Snake_Movement(SDL_Renderer* renderer, struct snake* B, int body_count) {
                     break;
                 }
                 }
-            }                    
+            }
         }
-        
+
     }
-    
+
 
 
 }
@@ -136,7 +136,7 @@ inline toScreen(int graph_coord, int axis) {
 int main(int argc, char* argv[])
 {
     setlocale(LC_ALL, "ru");
-    struct snake *body[10];
+    struct snake* body[10];
     int body_count = 10;
     Body_init(body, body_count);
 
@@ -148,7 +148,7 @@ int main(int argc, char* argv[])
     {
         SDL_Window* window = NULL; //окно 
 
-        window = SDL_CreateWindow(u8"Матвеев Сергей | Вариант 17", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+        window = SDL_CreateWindow(u8"Згурский Евгений | Вариант 13", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
         if (window == NULL)
         {
             printf_s("[!] При создании окна SDL произошла ошибка. Текст ошибки:\n%s\n\n", SDL_GetError());
@@ -160,14 +160,14 @@ int main(int argc, char* argv[])
             SDL_RenderClear(renderer);
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
             SDL_SetRenderDrawColor(renderer, 215, 215, 215, 255); // Светло-серый цвет
-            
+
             int run = 1;
             while (run) {
 
-                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0); 
+                SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0);
                 SDL_RenderClear(renderer);
 
-                Snake_Movement(renderer, body,body_count);
+                Snake_Movement(renderer, body, body_count);
 
                 SDL_SetRenderDrawColor(renderer, 180, 180, 180, 255);
                 for (int i = -25; i < 25; i++)
@@ -176,7 +176,7 @@ int main(int argc, char* argv[])
                     SDL_RenderDrawLine(renderer, 0, toScreen(i, 'y'), SCREEN_WIDTH, toScreen(i, 'y')); // Вертикальные линии клеток
                 }
                 SDL_RenderPresent(renderer);
-                
+
                 SDL_Delay(100);
 
             }
