@@ -48,6 +48,8 @@ int main() {
 	arrayProccessing(array, row, &arith_mean, &mark_count, &bad_mark, &good_st);
 
 	printf_s("Количество оценок: %d\nКоличество неуд. оценок: %d\nКолличество отличников: %d\nСредний балл: %lf\n", mark_count, bad_mark, good_st, arith_mean);
+	
+	free(array);
 
 	//system("pause");
 
